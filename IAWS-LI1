@@ -1,0 +1,19 @@
+Exp 1:(Connect EC2 Ubuntu Using PuTTY (.ppk Key))
+1. EC2 instance (.ppk file)
+2. Launch putty then on ec2 instance click connect there you will find public ipv4 copy and in putty fill as ubunut@10.11.x.x
+3.Connection → SSH → Auth → Credentials->browse->select ppk file ->open
+4.click yes then to verify click whoami(ans:ubuntu)
+Using .pem to convert to .ppk so now create instance with .pem
+1.open puttygen click on load and in thee dropdown select allfiles then select the pem file click save private key and save it. Now follow the same steps putty and so on.
+Connecting to EC2 Using AWS CloudShell:
+1. Cloudshell upload your .pem click ls to verify now write command chmod 400 filename then go to instance->connect->ssh client copy command ssh-i paste and verify with whoami (ans:ubuntu)
+
+
+Exp 2A:(1.	a) Create and attach an EBS volume to an EC2 instance, and b)	scale the instance by increasing CPU and RAM by changing the instance type.)
+1.EC2 instance (.ppk) -> volumes create volume in same az as instance->select volume->actions->attach volume -> select ec2 instance and device name connect.
+2. Verify by connecting to ec2 instance->connect->connect command: lsblk
+3. Increasing or decreasing capacity: ec2 dashboard->stop instance->actions->instance settings->modify volume->modify->click modify-> start again now you will see the change,
+Exp 2B:(2.Attach and permanently mount an EBS volume to a Linux EC2 instance to ensure data persistence across reboots.)
+sudo fdisk /dev/nvme1n1->n->p-><Enter>-><Enter>-><Enter>->w->sudo partprobe->lsblk->sudo mkfs.xfs /dev/nvme1n1p1->sudo mkdir /mnt/archana->sudo mount /dev/nvme1n1p1 /mnt/archana->df -h->sudo blkid /dev/nvme1n1p1(get UUID)
+->sudo nano /etc/fstab in this file paste this line UUID=YOUR_UUID_HERE   /mnt/archana   xfs   defaults,nofail   0   0(ctrl+o->enter->ctrl+x)->sudo mount -a->cd /mnt/archana->sudo chown ubuntu:ubuntu /mnt/surya->touch f1->ls->sudo reboot-> df -h->ls /mnt/surya
+Exp 2C:(3. Create a snapshot of the attached EBS volume and use it to create and attach a new volume to an EC2 instance in another AWS region.)
