@@ -17,3 +17,47 @@ Exp 2B:(2.Attach and permanently mount an EBS volume to a Linux EC2 instance to 
 sudo fdisk /dev/nvme1n1->n->p-><Enter>-><Enter>-><Enter>->w->sudo partprobe->lsblk->sudo mkfs.xfs /dev/nvme1n1p1->sudo mkdir /mnt/archana->sudo mount /dev/nvme1n1p1 /mnt/archana->df -h->sudo blkid /dev/nvme1n1p1(get UUID)
 ->sudo nano /etc/fstab in this file paste this line UUID=YOUR_UUID_HERE   /mnt/archana   xfs   defaults,nofail   0   0(ctrl+o->enter->ctrl+x)->sudo mount -a->cd /mnt/archana->sudo chown ubuntu:ubuntu /mnt/surya->touch f1->ls->sudo reboot-> df -h->ls /mnt/surya
 Exp 2C:(3. Create a snapshot of the attached EBS volume and use it to create and attach a new volume to an EC2 instance in another AWS region.)
+
+
+
+Exp 3:EFS
+1.two ec2 instances one in a and another in 1b sg(ssh-22-anywhere,nfs-anywhere)
+2.create efs-vpc default->enable region->add the newly created sg
+3.open two powershells and connect using ssh then follow these commands in both:
+sudo su->apt update->apt install -y nfs-common->mkdir /efs->mount -t nfs4 -o nfsvers=4.1 fs-XXXXXXXX.efs.us-east-1.amazonaws.com:/ /efs(replace with dns in efs)->df -h
+4.Testing: cd /efs->echo "hello" >ex.txt->ls in another cd /efs->ls
+
+
+Exp 4: S3
+create s3 bucket->disable block public access->enable acls->open bucket->permissions->acl edit->public(anywhere) read tick
+upload object->click on object->acls->read->open url if access denied paste this in bucket->permissions->bucket policy->
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    }
+  ]
+}replace with nucket name
+For versioning first diable versioning then enable and upload then it works
+CRR: create another bucket in oregon enable versioning->src bucket->management->repliaction rules->create rep rule
+->status:enabled->scope->all objects->labrole->pop up->no->submit->upload in src->Wait for one min->you will see in dest
+
+
+
+Exp 5:VPC creation and EC2 connection
+vpc->create->vpc only->10.0.0.0/16->public subnet->private subent
+craete igw->attach vpc->create route table->select vpc->Add route->dest=10.0.0.0/16 type=igw
+select table->subnet ass tab->edit subnet ass-> tick the public subnet->save
+private route table->everything default->save
+public subnet->edit subnet ass->enable auto assign public ipv4
+create sg->2.	Add inbound rules:HTTP (80) / HTTPS (443)->SSH (22) from trusted IP
+attach to both public and private instances
+public instance :
+network settings ->edit->select vpc->publci subnt->Auto assign->enable->select sg
+private instance: vpc,sg->Same->private subnet->auto assign->disable
+verify: public can be accessed through ssh  in cmd but not priavte insatnce
