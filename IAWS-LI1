@@ -61,3 +61,26 @@ public instance :
 network settings ->edit->select vpc->publci subnt->Auto assign->enable->select sg
 private instance: vpc,sg->Same->private subnet->auto assign->disable
 verify: public can be accessed through ssh  in cmd but not priavte insatnce
+
+
+
+Exp 6:VPC using NAT
+create vpc->10.0.0.0/16
+public subnet->10.0.1.0/24->routetable->0.0.0.0/0(igw)
+private subnet->10.0.2.0/24
+internet gateway->attach vpc
+sg->ssh(bastion)myip
+sg->pr->ssh(bastion pri ip)->mysql=10.0.1.0/24
+network acl->attach one to both:100=22;110=3306;120=1024-65535
+create ec2instances:bastion(ENABLE);db(DISABLE)
+nat gateway->publicsn->Alocate automatically
+private rt->0.0.0.0/0->nat gatewayt
+ssh -i "C:\Users\info\Downloads\bastion.pem" ubuntu@<BASTION_PUBLIC_IP>
+scp -i "C:\Users\info\Downloads\bastion.pem" "C:\Users\info\Downloads\db.pem" ubuntu@<BASTION_PUBLIC_IP>:/home/ubuntu/
+ls
+chmod 400 db.pem
+ssh -i db.pem ubuntu@<DB_PRIVATE_IP>
+sudo apt update
+sudo apt install mysql-server -y
+sudo systemctl start mysql
+sudo systemctl status mysql
