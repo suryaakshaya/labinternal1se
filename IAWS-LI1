@@ -144,3 +144,22 @@ vpc-def,subnets select all,enable auto assign public ip,create
 if fails go to lab role->policy makee sure in the code elasticbeanstalk.amazonaws.com is there.
 
 
+
+
+Week12:
+Go to iam->create role->enter name->provide access to aws management console->pass->permissions->s3 ull acess->Download csv file
+logout sign in with link given in csv file 
+Test:ec2 should fail and s3 should work
+Creating access keys:
+login as root->users->ur role->security cred->create access key->cli->download csv
+now go to browser and download aws cli->enter the values using the csv file and test ec2 will fail by 
+aws configure
+aws ec2 describe-instances
+aws s3 ls
+aws s3 mb s3://new-name 
+verify in buckets again.
+
+
+Week13:
+Go to iam->users->create role->Aws service->ec2->add policy->s3full access->create ec2 instance->select->Actions->Security->modify iam role->newly created role->connect to ec2 thrpugh ssh and type command aws s3 ls
+it should work and aws ec2 describe-instances should fail
