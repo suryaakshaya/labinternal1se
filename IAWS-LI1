@@ -132,3 +132,15 @@ Same like above bucket->sns->create topic->standard->create sqs->standard->creat
 open sns->create subscription->end point->sqs->Select the queue
 go to s3->properties->add event notification->all events creation->sns topic->select sns->create
 upload file in s3->now go to sqs->send and recieve messages->poll messages rows will appear.
+
+
+
+Week10:
+Go to elastic beanstalk and create app tomcat->web env->lab role->elasticbeanstack edit in the policy:"elasticbeanstalk.amazonaws.com"
+to create labrole: elastic beanstalk ani click chesi webtier,workertier,multicontainerdocker,managedupdatescustomerrolepolicy add chey
+to create lab instance profile: webtier,instance core
+service role:labrole, instanceprofile:labinstanceprofile
+vpc-def,subnets select all,enable auto assign public ip,create 
+if fails go to lab role->policy makee sure in the code elasticbeanstalk.amazonaws.com is there.
+
+
