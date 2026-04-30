@@ -135,6 +135,25 @@ upload file in s3->now go to sqs->send and recieve messages->poll messages rows 
 
 
 
+Week 9:
+create a instance->ssh and http anywhere connect and run the following commabds:
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "This is server 1"|sudo tee /var/www/html/index/html
+now create second instance and do the same 
+create sg for lb http anywhere
+create target grp select the both ec2 instances and register them
+now create lb application from ec2 dashboard select sg and target grp def vpc wait until status is active now go to target grp and check 2 healthy will be there 
+now open dns you will get 1 and refresh you will get 2
+select  a instance->action->image->create ami
+ec2->launch templates->select ami->http anywhere->create
+create auto scaling grp->select template->vpc->all subnets->existing lb->desired 2->min1->max4
+now wiat till active->terminate one instance ->it will be created automatically watit and watch
+
+
+
 Week10:
 Go to elastic beanstalk and create app tomcat->web env->lab role->elasticbeanstack edit in the policy:"elasticbeanstalk.amazonaws.com"
 to create labrole: elastic beanstalk ani click chesi webtier,workertier,multicontainerdocker,managedupdatescustomerrolepolicy add chey
