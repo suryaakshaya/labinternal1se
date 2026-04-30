@@ -165,6 +165,16 @@ if fails go to lab role->policy makee sure in the code elasticbeanstalk.amazonaw
 
 
 
+Week 11:
+Go to amazn lex:
+create bot->create new iamrole->intents->add intent->name->slots as required->click on advanched options then conditional branching(slot prompts->more promt options->add card)
+slot types->custom
+inital message confirmation response->build->test
+
+
+
+
+
 Week12:
 Go to iam->create role->enter name->provide access to aws management console->pass->permissions->s3 ull acess->Download csv file
 logout sign in with link given in csv file 
