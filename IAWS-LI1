@@ -132,6 +132,53 @@ Same like above bucket->sns->create topic->standard->create sqs->standard->creat
 open sns->create subscription->end point->sqs->Select the queue
 go to s3->properties->add event notification->all events creation->sns topic->select sns->create
 upload file in s3->now go to sqs->send and recieve messages->poll messages rows will appear.
+in sns policy just change to arnEquals in sqs update the access policy.
+{
+  "Version": "2008-10-17",
+  "Id": "__default_policy_ID",
+  "Statement": [
+    {
+      "Sid": "__default_statement_ID",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "SNS:GetTopicAttributes",
+        "SNS:SetTopicAttributes",
+        "SNS:AddPermission",
+        "SNS:RemovePermission",
+        "SNS:DeleteTopic",
+        "SNS:Subscribe",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:Publish"
+      ],
+      "Resource": "arn:aws:sns:us-east-1:304896042643:mytopic1",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceOwner": "304896042643"
+        }
+      }
+    },
+    {
+      "Sid": "AllowS3Publish",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": "SNS:Publish",
+      "Resource": "arn:aws:sns:us-east-1:304896042643:mytopic1",
+      "Condition": {
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:s3:::YOUR-BUCKET-NAME"
+        },
+        "StringEquals": {
+          "aws:SourceAccount": "304896042643"
+        }
+      }
+    }
+  ]
+}
 
 
 
